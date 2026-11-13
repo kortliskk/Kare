@@ -550,7 +550,7 @@ async function importFromTmdb(input) {
     posterUrl: data.poster_path
       ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
       : "",
-    sourceUrl: `https://www.themoviedb.org/${category}/${id}`
+    sourceUrl: url.href
   };
 }
 
