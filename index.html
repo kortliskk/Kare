@@ -610,6 +610,92 @@
 
     });
   </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
 
+    const addDialog = document.getElementById("addDialog");
+    const authDialog = document.getElementById("authDialog");
+
+    // İçerik ekleme penceresini aç
+    ["openAddBtn", "welcomeAddBtn", "emptyAddBtn"].forEach(id => {
+        const btn = document.getElementById(id);
+
+        if (btn) {
+            btn.addEventListener("click", () => {
+                if (!addDialog.open) addDialog.showModal();
+            });
+        }
+    });
+
+    // Film ve dizi seçimi
+    document.querySelectorAll(".type-option").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".type-option").forEach(b => {
+                b.classList.remove("active");
+            });
+
+            btn.classList.add("active");
+        });
+    });
+
+    // Manuel ekleme ve bağlantı ile ekleme
+    document.querySelectorAll(".mode-tab").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const mode = btn.dataset.mode;
+
+            document.querySelectorAll(".mode-tab").forEach(b => {
+                b.classList.remove("active");
+            });
+
+            btn.classList.add("active");
+
+            document.getElementById("urlMode").hidden = mode !== "url";
+            document.getElementById("manualMode").hidden = mode !== "manual";
+        });
+    });
+
+    // Kapatma butonları
+    document.addEventListener("click", event => {
+        const closeBtn = event.target.closest("[data-close]");
+
+        if (closeBtn) {
+            const dialog = document.getElementById(closeBtn.dataset.close);
+
+            if (dialog && dialog.open) {
+                dialog.close();
+            }
+        }
+    });
+
+    // Pencerenin dışına dokununca kapat
+    [addDialog, authDialog, document.getElementById("detailDialog"),
+     document.getElementById("childDialog")].forEach(dialog => {
+
+        if (!dialog) return;
+
+        dialog.addEventListener("click", event => {
+            if (event.target === dialog) dialog.close();
+        });
+    });
+
+    // Hesap oluşturma / giriş penceresi
+    const authBtn = document.getElementById("sidebarAuthBtn");
+
+    if (authBtn) {
+        authBtn.addEventListener("click", () => {
+            if (!authDialog.open) authDialog.showModal();
+        });
+    }
+
+    const accountBtn = document.getElementById("accountAction");
+
+    if (accountBtn) {
+        accountBtn.addEventListener("click", () => {
+            if (!authDialog.open) authDialog.showModal();
+        });
+    }
+
+});
+</script>
 </body>
 </html>
