@@ -1968,39 +1968,7 @@ function bindEvents() {
     });
   });
 }
- /* KLAVYE KISAYOLLARI */
 
-  document.addEventListener("keydown", event => {
-    if (
-      (event.metaKey || event.ctrlKey) &&
-      event.key.toLowerCase() === "k"
-    ) {
-      event.preventDefault();
-      $("#searchInput").focus();
-    }
-
-    if (
-      event.key === "Enter" &&
-      event.target.matches('.card-poster[role="button"]')
-    ) {
-      openDetails(event.target.dataset.id);
-    }
-  });
-
-  /* PENCERE DIŞINA DOKUNUNCA KAPAT */
-
-  dialogs.forEach(id => {
-    const dialog = document.getElementById(id);
-
-    if (!dialog) return;
-
-    dialog.addEventListener("click", event => {
-      if (event.target === dialog) {
-        dialog.close();
-      }
-    });
-  });
-}
 
 /* =========================================================
    UYGULAMAYI BAŞLAT
