@@ -5,12 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0b0b0d">
   <meta name="description" content="KARE ile film ve dizi arşivini tek yerde tut. İzleyeceklerini, başladıklarını ve bitirdiklerini takip et.">
+
   <title>KARE — İzleme arşivin</title>
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23fa593d'/%3E%3Cpath d='M17 17h30v30H17z' fill='none' stroke='white' stroke-width='5'/%3E%3C/svg%3E">
 
   <link rel="stylesheet" href="styles.css">
 
+  <!-- Gizli elemanların görünmesini engeller -->
+  <style>
+    [hidden] {
+      display: none !important;
+    }
+  </style>
+
+  <!-- Önce Supabase, sonra yapılandırma, en son uygulama -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
   <script src="app.js" defer></script>
@@ -23,13 +32,23 @@
 
   <div class="app-shell">
 
+    <!-- SOL MENÜ -->
+
     <aside class="sidebar">
 
       <a class="brand" href="#top" aria-label="KARE ana sayfa">
+
         <span class="brand-mark">
-          <span></span><span></span><span></span><span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
         </span>
-        <span class="brand-name">KARE<span class="brand-period">.</span></span>
+
+        <span class="brand-name">
+          KARE<span class="brand-period">.</span>
+        </span>
+
       </a>
 
       <div class="side-label">MENÜ</div>
@@ -37,19 +56,29 @@
       <nav class="side-nav" aria-label="Ana menü">
 
         <a class="nav-link active" href="#library" data-nav="all">
+
           <span class="nav-icon icon-grid"></span>
+
           <span>Arşivim</span>
+
           <span class="nav-count" id="navCount">0</span>
+
         </a>
 
         <button class="nav-link" type="button" data-filter="movie">
+
           <span class="nav-icon icon-film"></span>
+
           <span>Filmler</span>
+
         </button>
 
         <button class="nav-link" type="button" data-filter="series">
+
           <span class="nav-icon icon-tv"></span>
+
           <span>Diziler</span>
+
         </button>
 
       </nav>
@@ -57,19 +86,31 @@
       <div class="sidebar-divider"></div>
 
       <div class="side-note">
+
         <div class="side-note-orb">✦</div>
+
         <p class="side-note-title">Kendi hikâyen.</p>
-        <p class="side-note-copy">İzlediklerini biriktir. Sıradakini hiç kaybetme.</p>
+
+        <p class="side-note-copy">
+          İzlediklerini biriktir. Sıradakini hiç kaybetme.
+        </p>
+
       </div>
+
+      <!-- HESAP ALANI -->
 
       <div class="sidebar-bottom">
 
         <div class="account-card" id="accountCard">
+
           <div class="avatar" id="accountAvatar">M</div>
 
           <div class="account-meta">
+
             <strong id="accountName">Misafir</strong>
+
             <span id="accountCaption">Yerel oturum</span>
+
           </div>
 
           <button
@@ -78,65 +119,106 @@
             type="button"
             aria-label="Hesap işlemleri"
             title="Hesap işlemleri">
+
             <span class="dots-icon">···</span>
+
           </button>
+
         </div>
 
-        <button class="sidebar-account-cta" id="sidebarAuthBtn" type="button">
+        <button
+          class="sidebar-account-cta"
+          id="sidebarAuthBtn"
+          type="button">
+
           Hesap oluştur <span>↗</span>
+
         </button>
 
       </div>
+
     </aside>
 
+    <!-- ANA ALAN -->
+
     <main class="main-content" id="top">
+
+      <!-- ÜST BAR -->
 
       <header class="topbar">
 
         <div class="breadcrumb">
+
           <span>ÇALIŞMA ALANI</span>
+
           <i></i>
+
           <strong>Arşivim</strong>
+
         </div>
 
         <div class="topbar-actions">
 
           <label class="search-box" for="searchInput">
+
             <span class="search-icon"></span>
+
             <input
               id="searchInput"
               type="search"
               placeholder="Arşivinde ara..."
               autocomplete="off">
+
             <kbd>⌘ K</kbd>
+
           </label>
 
-          <button class="button button-primary top-add" id="openAddBtn" type="button">
+          <button
+            class="button button-primary top-add"
+            id="openAddBtn"
+            type="button">
+
             <span class="plus">＋</span>
+
             İçerik ekle
+
           </button>
 
         </div>
+
       </header>
+
+      <!-- KARŞILAMA ALANI -->
 
       <section class="welcome-section">
 
         <div class="welcome-copy">
 
           <div class="eyebrow">
+
             <span class="eyebrow-line"></span>
+
             SENİN KİŞİSEL SİNEMAN
+
           </div>
 
-          <h1>Her hikâyenin<br><span>bir yeri var.</span></h1>
+          <h1>
+            Her hikâyenin<br>
+            <span>bir yeri var.</span>
+          </h1>
 
           <p>
             İzlediklerini düzenle, yarım kalanlara dön,
             keşfedeceklerini biriktir.
           </p>
 
-          <button class="button button-quiet" id="welcomeAddBtn" type="button">
+          <button
+            class="button button-quiet"
+            id="welcomeAddBtn"
+            type="button">
+
             Arşivine içerik ekle <span>↗</span>
+
           </button>
 
         </div>
@@ -144,120 +226,226 @@
         <div class="hero-art" aria-hidden="true">
 
           <div class="hero-orbit orbit-one"></div>
+
           <div class="hero-orbit orbit-two"></div>
 
           <div class="hero-poster poster-back">
+
             <div class="poster-sheen"></div>
+
             <div class="poster-lines"></div>
+
             <span>THE<br>UNKNOWN</span>
+
           </div>
 
           <div class="hero-poster poster-front">
+
             <div class="poster-sun"></div>
+
             <div class="poster-horizon"></div>
-            <span class="poster-caption">A STORY<br>WORTH KEEPING</span>
+
+            <span class="poster-caption">
+              A STORY<br>WORTH KEEPING
+            </span>
+
           </div>
 
           <div class="hero-star star-a">✳</div>
+
           <div class="hero-star star-b">✦</div>
 
           <div class="hero-tag">
+
             <span class="hero-tag-dot"></span>
+
             YOUR NEXT FAVORITE
+
           </div>
 
         </div>
 
-        <div class="welcome-index">01 <span>/</span> 03</div>
+        <div class="welcome-index">
+          01 <span>/</span> 03
+        </div>
 
       </section>
+
+      <!-- İSTATİSTİKLER -->
 
       <section class="stats-grid" aria-label="Arşiv özeti">
 
         <article class="stat-card stat-total">
+
           <div class="stat-top">
+
             <span>TOPLAM ARŞİV</span>
+
             <span class="stat-symbol">◈</span>
+
           </div>
+
           <div class="stat-number" id="statTotal">0</div>
-          <div class="stat-foot">kişisel koleksiyonun</div>
+
+          <div class="stat-foot">
+            kişisel koleksiyonun
+          </div>
+
           <div class="stat-line"></div>
+
         </article>
 
         <article class="stat-card">
+
           <div class="stat-top">
+
             <span>FİLMLER</span>
+
             <span class="stat-symbol">▧</span>
+
           </div>
+
           <div class="stat-number" id="statMovies">0</div>
-          <div class="stat-foot">tek oturuşluk hikâyeler</div>
+
+          <div class="stat-foot">
+            tek oturuşluk hikâyeler
+          </div>
+
         </article>
 
         <article class="stat-card">
+
           <div class="stat-top">
+
             <span>DİZİLER</span>
+
             <span class="stat-symbol">▤</span>
+
           </div>
+
           <div class="stat-number" id="statSeries">0</div>
-          <div class="stat-foot">bölüm bölüm keşif</div>
+
+          <div class="stat-foot">
+            bölüm bölüm keşif
+          </div>
+
         </article>
 
         <article class="stat-card stat-progress">
+
           <div class="stat-top">
+
             <span>TAMAMLANAN</span>
+
             <span class="stat-symbol">✓</span>
+
           </div>
+
           <div class="stat-number" id="statDone">0</div>
-          <div class="stat-foot">bitirdiğin içerik</div>
+
+          <div class="stat-foot">
+            bitirdiğin içerik
+          </div>
+
           <div class="progress-track">
             <span id="doneProgress"></span>
           </div>
+
         </article>
 
       </section>
+
+      <!-- ARŞİV -->
 
       <section class="library-section" id="library">
 
         <div class="section-heading">
 
           <div>
-            <div class="eyebrow section-eyebrow">KOLEKSİYONUN</div>
-            <h2>Arşiv <span id="visibleCount">(0)</span></h2>
+
+            <div class="eyebrow section-eyebrow">
+              KOLEKSİYONUN
+            </div>
+
+            <h2>
+              Arşiv <span id="visibleCount">(0)</span>
+            </h2>
+
           </div>
 
           <div class="library-tools">
-            <button class="sort-button" id="sortBtn" type="button">
+
+            <button
+              class="sort-button"
+              id="sortBtn"
+              type="button">
+
               <span class="sort-icon">↕</span>
+
               Son eklenen
+
               <span class="chevron">⌄</span>
+
             </button>
+
           </div>
 
         </div>
 
-        <div class="filter-row" role="group" aria-label="İçerik filtresi">
+        <!-- FİLTRELER -->
 
-          <button class="filter-chip active" data-filter="all" type="button">
+        <div
+          class="filter-row"
+          role="group"
+          aria-label="İçerik filtresi">
+
+          <button
+            class="filter-chip active"
+            data-filter="all"
+            type="button">
+
             Tümü <span id="allCount">0</span>
+
           </button>
 
-          <button class="filter-chip" data-filter="movie" type="button">
+          <button
+            class="filter-chip"
+            data-filter="movie"
+            type="button">
+
             Filmler <span id="movieCount">0</span>
+
           </button>
 
-          <button class="filter-chip" data-filter="series" type="button">
+          <button
+            class="filter-chip"
+            data-filter="series"
+            type="button">
+
             Diziler <span id="seriesCount">0</span>
+
           </button>
 
         </div>
 
-        <div class="content-grid" id="contentGrid" aria-live="polite"></div>
+        <!-- İÇERİK KARTLARI -->
+
+        <div
+          class="content-grid"
+          id="contentGrid"
+          aria-live="polite">
+        </div>
+
+        <!-- BOŞ ARŞİV -->
 
         <div class="empty-state" id="emptyState">
 
           <div class="empty-art">
+
             <span>✦</span>
+
             <div></div>
+
           </div>
 
           <h3>Henüz hikâye eklenmedi.</h3>
@@ -266,33 +454,63 @@
             Arşivin boş bir sayfa. İlk filmini veya dizini ekleyerek başla.
           </p>
 
-          <button class="button button-primary" id="emptyAddBtn" type="button">
+          <button
+            class="button button-primary"
+            id="emptyAddBtn"
+            type="button">
+
             <span class="plus">＋</span>
+
             İlk içeriğini ekle
+
           </button>
 
         </div>
 
+        <!-- ARAMA SONUCU BULUNAMADI -->
+
         <div class="no-results" id="noResults" hidden>
+
           <span>⌕</span>
+
           <strong>Aradığın içerik bulunamadı.</strong>
+
           <p>Farklı bir isimle tekrar dene.</p>
+
         </div>
 
       </section>
 
+      <!-- ALT BİLGİ -->
+
       <footer class="footer">
+
         <span>© 2026 KARE</span>
+
         <span>İzleme arşivin, kendi ritminde.</span>
-        <span class="footer-status"><i></i> HER ŞEY YERİNDE</span>
+
+        <span class="footer-status">
+          <i></i> HER ŞEY YERİNDE
+        </span>
+
       </footer>
 
     </main>
+
   </div>
 
-  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <!-- BİLDİRİM ALANI -->
 
-  <!-- İÇERİK EKLEME PENCERESİ -->
+  <div
+    class="toast-region"
+    id="toastRegion"
+    aria-live="polite"
+    aria-atomic="true">
+  </div>
+
+  <!-- =====================================================
+       İÇERİK EKLEME PENCERESİ
+       ===================================================== -->
 
   <dialog class="modal" id="addDialog">
 
@@ -301,39 +519,85 @@
       <div class="modal-top">
 
         <div>
-          <div class="eyebrow">KOLEKSİYONUNA YENİ BİR HİKÂYE</div>
-          <h2>İçerik ekle<span class="accent-dot">.</span></h2>
+
+          <div class="eyebrow">
+            KOLEKSİYONUNA YENİ BİR HİKÂYE
+          </div>
+
+          <h2>
+            İçerik ekle<span class="accent-dot">.</span>
+          </h2>
+
         </div>
 
-        <button class="icon-button close-modal" type="button" data-close="addDialog" aria-label="Kapat">×</button>
+        <button
+          class="icon-button close-modal"
+          type="button"
+          data-close="addDialog"
+          aria-label="Kapat">
+
+          ×
+
+        </button>
 
       </div>
 
-      <div class="type-switch" role="group" aria-label="İçerik türü">
+      <!-- FİLM / DİZİ SEÇİMİ -->
 
-        <button type="button" class="type-option active" data-kind="movie">
+      <div
+        class="type-switch"
+        role="group"
+        aria-label="İçerik türü">
+
+        <button
+          type="button"
+          class="type-option active"
+          data-kind="movie">
+
           <span>▧</span> Film
+
         </button>
 
-        <button type="button" class="type-option" data-kind="series">
+        <button
+          type="button"
+          class="type-option"
+          data-kind="series">
+
           <span>▤</span> Dizi
+
         </button>
 
       </div>
+
+      <!-- EKLEME YÖNTEMİ -->
 
       <div class="mode-tabs">
 
-        <button class="mode-tab active" type="button" data-mode="url">
-          Bağlantı ile ekle <span class="mode-badge">OTOMATİK</span>
+        <button
+          class="mode-tab"
+          type="button"
+          data-mode="url">
+
+          Bağlantı ile ekle
+
+          <span class="mode-badge">OTOMATİK</span>
+
         </button>
 
-        <button class="mode-tab" type="button" data-mode="manual">
+        <button
+          class="mode-tab active"
+          type="button"
+          data-mode="manual">
+
           Manuel ekle
+
         </button>
 
       </div>
 
-      <div class="form-mode" id="urlMode">
+      <!-- BAĞLANTI İLE EKLEME -->
+
+      <div class="form-mode" id="urlMode" hidden>
 
         <label class="field-label" for="sourceUrl">
           TMDB veya IMDb bağlantısı
@@ -348,8 +612,13 @@
             placeholder="https://www.themoviedb.org/movie/..."
             autocomplete="url">
 
-          <button class="button button-secondary" id="importBtn" type="button">
+          <button
+            class="button button-secondary"
+            id="importBtn"
+            type="button">
+
             Bilgileri getir <span>↗</span>
+
           </button>
 
         </div>
@@ -358,11 +627,17 @@
           Afiş ve açıklama otomatik doldurulur. TMDB API anahtarı gerekir.
         </p>
 
-        <div class="import-preview" id="importPreview" hidden></div>
+        <div
+          class="import-preview"
+          id="importPreview"
+          hidden>
+        </div>
 
       </div>
 
-      <div class="form-mode" id="manualMode" hidden>
+      <!-- MANUEL EKLEME -->
+
+      <div class="form-mode" id="manualMode">
 
         <label class="field-label" for="manualTitle">
           İçerik adı <b>*</b>
@@ -372,12 +647,17 @@
           class="field-input"
           id="manualTitle"
           maxlength="180"
-          placeholder="Örn. Interstellar">
+          placeholder="Örn. Interstellar"
+          autocomplete="off">
 
         <div class="form-two-col">
 
           <div>
-            <label class="field-label" for="manualYear">Yıl</label>
+
+            <label class="field-label" for="manualYear">
+              Yıl
+            </label>
+
             <input
               class="field-input"
               id="manualYear"
@@ -385,22 +665,28 @@
               min="1880"
               max="2200"
               placeholder="2024">
+
           </div>
 
           <div>
+
             <label class="field-label" for="manualPoster">
               Afiş görseli URL'si
             </label>
+
             <input
               class="field-input"
               id="manualPoster"
               type="url"
               placeholder="https://...">
+
           </div>
 
         </div>
 
-        <label class="field-label" for="manualOverview">Kısa açıklama</label>
+        <label class="field-label" for="manualOverview">
+          Kısa açıklama
+        </label>
 
         <textarea
           class="field-input field-textarea"
@@ -415,24 +701,43 @@
 
       </div>
 
-      <div class="modal-error" id="addError" role="alert"></div>
+      <div
+        class="modal-error"
+        id="addError"
+        role="alert">
+      </div>
+
+      <!-- EKLEME BUTONLARI -->
 
       <div class="modal-actions">
 
-        <button class="button button-quiet" type="button" data-close="addDialog">
+        <button
+          class="button button-quiet"
+          type="button"
+          data-close="addDialog">
+
           Vazgeç
+
         </button>
 
-        <button class="button button-primary" id="saveItemBtn" type="submit">
+        <button
+          class="button button-primary"
+          id="saveItemBtn"
+          type="submit">
+
           Arşive ekle <span>↗</span>
+
         </button>
 
       </div>
 
     </form>
+
   </dialog>
 
-  <!-- HESAP PENCERESİ -->
+  <!-- =====================================================
+       HESAP OLUŞTURMA / GİRİŞ PENCERESİ
+       ===================================================== -->
 
   <dialog class="modal" id="authDialog">
 
@@ -441,39 +746,72 @@
       <div class="modal-top">
 
         <div class="auth-brand">
+
           <span class="brand-mark small">
-            <span></span><span></span><span></span><span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
           </span>
-          <span>KARE<span class="brand-period">.</span></span>
+
+          <span>
+            KARE<span class="brand-period">.</span>
+          </span>
+
         </div>
 
-        <button class="icon-button close-modal" type="button" data-close="authDialog" aria-label="Kapat">×</button>
+        <button
+          class="icon-button close-modal"
+          type="button"
+          data-close="authDialog"
+          aria-label="Kapat">
+
+          ×
+
+        </button>
 
       </div>
 
-      <div class="eyebrow" id="authEyebrow">KİŞİSEL ARŞİVİNİ KORU</div>
+      <div class="eyebrow" id="authEyebrow">
+        KİŞİSEL ARŞİVİNİ KORU
+      </div>
 
       <h2 id="authTitle">
-        Hikâyelerin<br><span>sana özel kalsın.</span>
+        Hikâyelerin<br>
+        <span>sana özel kalsın.</span>
       </h2>
 
       <p class="auth-copy" id="authCopy">
         Hesap oluştur, koleksiyonunu farklı cihazlarda senkronize et.
       </p>
 
+      <!-- GİRİŞ / KAYIT SEÇİMİ -->
+
       <div class="auth-tabs">
 
-        <button type="button" class="auth-tab active" data-auth-mode="register">
+        <button
+          type="button"
+          class="auth-tab active"
+          data-auth-mode="register">
+
           Hesap oluştur
+
         </button>
 
-        <button type="button" class="auth-tab" data-auth-mode="login">
+        <button
+          type="button"
+          class="auth-tab"
+          data-auth-mode="login">
+
           Giriş yap
+
         </button>
 
       </div>
 
-      <label class="field-label" for="authEmail">E-posta</label>
+      <label class="field-label" for="authEmail">
+        E-posta
+      </label>
 
       <input
         class="field-input"
@@ -483,7 +821,9 @@
         autocomplete="email"
         placeholder="ornek@eposta.com">
 
-      <label class="field-label" for="authPassword">Şifre</label>
+      <label class="field-label" for="authPassword">
+        Şifre
+      </label>
 
       <input
         class="field-input"
@@ -499,27 +839,46 @@
         En az 10 karakter kullan. Misafir listen hesabına aktarılır.
       </p>
 
-      <div class="modal-error" id="authError" role="alert"></div>
+      <div
+        class="modal-error"
+        id="authError"
+        role="alert">
+      </div>
 
-      <button class="button button-primary auth-submit" id="authSubmit" type="submit">
+      <button
+        class="button button-primary auth-submit"
+        id="authSubmit"
+        type="submit">
+
         Ücretsiz hesap oluştur <span>↗</span>
+
       </button>
 
       <p class="privacy-note">
         <span>◈</span>
-        Şifren tek yönlü olarak özetlenir. Oturumun güvenli çerezle korunur.
+        Şifren tek yönlü olarak özetlenir. Oturumun güvenli şekilde korunur.
       </p>
 
     </form>
+
   </dialog>
 
-  <!-- DETAY PENCERESİ -->
+  <!-- =====================================================
+       İÇERİK DETAY PENCERESİ
+       ===================================================== -->
 
   <dialog class="modal" id="detailDialog">
-    <div class="modal-card detail-modal" id="detailContent"></div>
+
+    <div
+      class="modal-card detail-modal"
+      id="detailContent">
+    </div>
+
   </dialog>
 
-  <!-- SEZON VE BÖLÜM PENCERESİ -->
+  <!-- =====================================================
+       SEZON / BÖLÜM EKLEME PENCERESİ
+       ===================================================== -->
 
   <dialog class="modal" id="childDialog">
 
@@ -528,19 +887,44 @@
       <div class="modal-top">
 
         <div>
-          <div class="eyebrow" id="childEyebrow">DİZİNE EKLE</div>
-          <h2 id="childTitle">Yeni sezon<span class="accent-dot">.</span></h2>
+
+          <div class="eyebrow" id="childEyebrow">
+            DİZİNE EKLE
+          </div>
+
+          <h2 id="childTitle">
+            Yeni sezon<span class="accent-dot">.</span>
+          </h2>
+
         </div>
 
-        <button class="icon-button close-modal" type="button" data-close="childDialog" aria-label="Kapat">×</button>
+        <button
+          class="icon-button close-modal"
+          type="button"
+          data-close="childDialog"
+          aria-label="Kapat">
+
+          ×
+
+        </button>
 
       </div>
 
-      <input type="hidden" id="childParentId">
-      <input type="hidden" id="childKind">
+      <input
+        type="hidden"
+        id="childParentId">
 
-      <label class="field-label" for="childName" id="childNameLabel">
+      <input
+        type="hidden"
+        id="childKind">
+
+      <label
+        class="field-label"
+        for="childName"
+        id="childNameLabel">
+
         Sezon adı
+
       </label>
 
       <input
@@ -551,7 +935,9 @@
         placeholder="Örn. 1. Sezon">
 
       <label class="field-label" for="childOverview">
+
         Not <span class="optional">(isteğe bağlı)</span>
+
       </label>
 
       <textarea
@@ -561,141 +947,36 @@
         maxlength="1200"
         placeholder="Bu sezon veya bölüm için bir not..."></textarea>
 
-      <div class="modal-error" id="childError" role="alert"></div>
+      <div
+        class="modal-error"
+        id="childError"
+        role="alert">
+      </div>
 
       <div class="modal-actions">
 
-        <button class="button button-quiet" type="button" data-close="childDialog">
+        <button
+          class="button button-quiet"
+          type="button"
+          data-close="childDialog">
+
           Vazgeç
+
         </button>
 
-        <button class="button button-primary" type="submit">
+        <button
+          class="button button-primary"
+          type="submit">
+
           Kaydet <span>↗</span>
+
         </button>
 
       </div>
 
     </form>
+
   </dialog>
 
-  <!-- İÇERİK EKLEME BUTONLARI İÇİN EK GÜVENLİK KODU -->
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-      const buttonIds = [
-        "openAddBtn",
-        "welcomeAddBtn",
-        "emptyAddBtn"
-      ];
-
-      buttonIds.forEach(function (id) {
-
-        const button = document.getElementById(id);
-        const dialog = document.getElementById("addDialog");
-
-        if (button && dialog) {
-
-          button.addEventListener("click", function () {
-
-            if (!dialog.open) {
-              dialog.showModal();
-            }
-
-          });
-
-        }
-
-      });
-
-    });
-  </script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const addDialog = document.getElementById("addDialog");
-    const authDialog = document.getElementById("authDialog");
-
-    // İçerik ekleme penceresini aç
-    ["openAddBtn", "welcomeAddBtn", "emptyAddBtn"].forEach(id => {
-        const btn = document.getElementById(id);
-
-        if (btn) {
-            btn.addEventListener("click", () => {
-                if (!addDialog.open) addDialog.showModal();
-            });
-        }
-    });
-
-    // Film ve dizi seçimi
-    document.querySelectorAll(".type-option").forEach(btn => {
-        btn.addEventListener("click", () => {
-            document.querySelectorAll(".type-option").forEach(b => {
-                b.classList.remove("active");
-            });
-
-            btn.classList.add("active");
-        });
-    });
-
-    // Manuel ekleme ve bağlantı ile ekleme
-    document.querySelectorAll(".mode-tab").forEach(btn => {
-        btn.addEventListener("click", () => {
-            const mode = btn.dataset.mode;
-
-            document.querySelectorAll(".mode-tab").forEach(b => {
-                b.classList.remove("active");
-            });
-
-            btn.classList.add("active");
-
-            document.getElementById("urlMode").hidden = mode !== "url";
-            document.getElementById("manualMode").hidden = mode !== "manual";
-        });
-    });
-
-    // Kapatma butonları
-    document.addEventListener("click", event => {
-        const closeBtn = event.target.closest("[data-close]");
-
-        if (closeBtn) {
-            const dialog = document.getElementById(closeBtn.dataset.close);
-
-            if (dialog && dialog.open) {
-                dialog.close();
-            }
-        }
-    });
-
-    // Pencerenin dışına dokununca kapat
-    [addDialog, authDialog, document.getElementById("detailDialog"),
-     document.getElementById("childDialog")].forEach(dialog => {
-
-        if (!dialog) return;
-
-        dialog.addEventListener("click", event => {
-            if (event.target === dialog) dialog.close();
-        });
-    });
-
-    // Hesap oluşturma / giriş penceresi
-    const authBtn = document.getElementById("sidebarAuthBtn");
-
-    if (authBtn) {
-        authBtn.addEventListener("click", () => {
-            if (!authDialog.open) authDialog.showModal();
-        });
-    }
-
-    const accountBtn = document.getElementById("accountAction");
-
-    if (accountBtn) {
-        accountBtn.addEventListener("click", () => {
-            if (!authDialog.open) authDialog.showModal();
-        });
-    }
-
-});
-</script>
 </body>
 </html>
