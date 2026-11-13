@@ -249,44 +249,45 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 .progress-fields { display: flex; align-items: end; gap: 7px; }.progress-fields label { display: grid; gap: 5px; color: #8f858a; font-size: 8px; }.progress-input { width: 62px; min-height: 34px; padding: 6px 8px; font-size: 11px; }.progress-fields .button { min-height: 34px; padding: 0 11px; font-size: 9px; }
 @media (max-width: 620px) { .watch-progress { align-items: stretch; flex-direction: column; gap: 12px; }.progress-fields { display: grid; grid-template-columns: 1fr 1fr auto; }.progress-input { width: 100%; }.progress-fields .button { align-self: end; } }
 
-/* YATAY TABLETTE İÇERİK EKLEME PENCERESİ KAYDIRMA DÜZELTMESİ */
+/* EKLEME PENCERESİ KAYDIRMA DÜZELTMESİ */
 
 #addDialog {
+  max-height: calc(100vh - 24px);
   max-height: calc(100dvh - 24px);
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+  padding: 0;
 }
 
 #addDialog .add-modal {
-  min-height: 0;
+  display: block;
+  width: 100%;
+  max-height: calc(100vh - 24px);
+  max-height: calc(100dvh - 24px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 #addDialog .modal-actions {
   position: sticky;
   bottom: 0;
-  z-index: 5;
-  padding: 14px 0 4px;
-  margin-top: 16px;
+  z-index: 10;
+  padding: 14px 0 5px;
   background: #151416;
 }
 
-/* Kısa ekranlarda boşlukları azalt */
 @media (max-height: 600px) {
   #addDialog .modal-card {
-    padding: 16px 22px;
+    padding: 14px 18px;
   }
 
   #addDialog .modal-top {
-    margin-bottom: 12px;
-  }
-
-  #addDialog .type-switch {
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   #addDialog .field-label {
-    margin-top: 10px;
+    margin-top: 8px;
   }
 }
