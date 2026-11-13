@@ -1023,7 +1023,41 @@ async function importMetadata() {
 
   if (!url) {
     $("#addError").textContent =
-      "Önce bir TMDB veya IMDb bağlantısı gir.";
+      "Önce bir bağlantı gir.";
+
+    return;
+  }
+
+  let parsedSourceUrl;
+
+  try {
+    parsedSourceUrl = new URL(url);
+
+    if (!["https:", "http:"].includes(parsedSourceUrl.protocol)) {
+      throw new Error();
+    }
+  } catch {
+    $("#addError").textContent =
+      "Geçerli bir http:// veya https:// bağlantısı gir.";
+    return;
+  }
+
+  const sourceHost = parsedSourceUrl.hostname.toLowerCase();
+
+  const isTmdbOrImdb =
+    sourceHost === "themoviedb.org" ||
+    sourceHost.endsWith(".themoviedb.org") ||
+    sourceHost === "imdb.com" ||
+    sourceHost.endsWith(".imdb.com");
+
+  if (!isTmdbOrImdb) {
+    $("#manualSourceUrl").value = parsedSourceUrl.href;
+    setAddMode("manual");
+    $("#manualTitle").focus();
+
+    showToast(
+      "Bağlantı kaynak olarak eklendi. İçerik adını doldurup arşive ekle."
+    );
 
     return;
   }
