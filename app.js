@@ -1037,6 +1037,7 @@ async function importMetadata() {
     });
 
     state.imported = result.metadata;
+     state.imported.sourceUrl = url;
 
     setSelectedKind(result.metadata.kind);
     renderImportPreview(result.metadata);
