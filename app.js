@@ -1968,8 +1968,7 @@ function bindEvents() {
     });
   });
 }
-
-  /* KLAVYE KISAYOLLARI */
+ /* KLAVYE KISAYOLLARI */
 
   document.addEventListener("keydown", event => {
     if (
