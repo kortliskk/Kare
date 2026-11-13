@@ -1071,7 +1071,7 @@ async function importMetadata() {
     });
 
     state.imported = result.metadata;
-     state.imported.sourceUrl = url;
+    state.imported.sourceUrl = parsedSourceUrl.href;
 
     setSelectedKind(result.metadata.kind);
     renderImportPreview(result.metadata);
@@ -1115,8 +1115,9 @@ async function saveNewItem(event) {
       overview: state.imported.overview,
       year: state.imported.year,
       posterUrl: state.imported.posterUrl,
-      sourceUrl: state.imported.sourceUrl
+      sourceUrl: state.imported.sourceUrl || ""
     };
+
   } else {
     const poster = $("#manualPoster").value.trim();
 
@@ -1127,12 +1128,30 @@ async function saveNewItem(event) {
       return;
     }
 
+    const sourceUrl = $("#manualSourceUrl").value.trim();
+
+    if (sourceUrl) {
+      try {
+        const parsed = new URL(sourceUrl);
+
+        if (!["https:", "http:"].includes(parsed.protocol)) {
+          throw new Error();
+        }
+      } catch {
+        $("#addError").textContent =
+          "Kaynak bağlantısı geçerli bir http:// veya https:// adresi olmalı.";
+
+        return;
+      }
+    }
+
     payload = {
       kind: state.selectedKind,
       title: $("#manualTitle").value.trim(),
       year: $("#manualYear").value.trim() || null,
       posterUrl: poster,
-      overview: $("#manualOverview").value.trim()
+      overview: $("#manualOverview").value.trim(),
+      sourceUrl: sourceUrl
     };
 
     if (!payload.title) {
@@ -2003,6 +2022,7 @@ function bindEvents() {
     });
   });
 }
+
 /* =========================================================
    UYGULAMAYI BAŞLAT
    ========================================================= */
