@@ -1822,128 +1822,87 @@ async function deleteItem(itemId) {
    ========================================================= */
 
 function bindEvents() {
-  /* İÇERİK EKLE BUTONLARI */
+  // İÇERİK EKLEME PENCERESİ
+  $("#openAddBtn").addEventListener("click", openAddDialog);
+  $("#welcomeAddBtn").addEventListener("click", openAddDialog);
+  $("#emptyAddBtn").addEventListener("click", openAddDialog);
 
-  $("#openAddBtn").addEventListener(
-    "click",
-    openAddDialog
-  );
+  // FİLM / DİZİ SEÇİMİ
+  $$(".type-option").forEach(button => {
+    button.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      setSelectedKind(button.dataset.kind);
+    });
+  });
 
-  $("#welcomeAddBtn").addEventListener(
-    "click",
-    openAddDialog
-  );
+  // MANUEL / BAĞLANTI SEÇİMİ
+  $$(".mode-tab").forEach(button => {
+    button.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      setAddMode(button.dataset.mode);
+    });
+  });
 
-  $("#emptyAddBtn").addEventListener(
-    "click",
-    openAddDialog
-  );
+  // TÜM KAPATMA VE VAZGEÇ BUTONLARI
+  $$("[data-close]").forEach(button => {
+    button.addEventListener("click", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      closeDialog(button.dataset.close);
+    });
+  });
 
-  /* FORM İŞLEMLERİ */
+  // FORMLAR
+  $("#addForm").addEventListener("submit", saveNewItem);
+  $("#importBtn").addEventListener("click", importMetadata);
+  $("#childForm").addEventListener("submit", saveChild);
+  $("#authForm").addEventListener("submit", submitAuth);
 
-  $("#addForm").addEventListener(
-    "submit",
-    saveNewItem
-  );
+  // HESAP
+  $("#sidebarAuthBtn").addEventListener("click", () => {
+    openAuth("register");
+  });
 
-  $("#importBtn").addEventListener(
-    "click",
-    importMetadata
-  );
-
-  $("#childForm").addEventListener(
-    "submit",
-    saveChild
-  );
-
-  $("#authForm").addEventListener(
-    "submit",
-    submitAuth
-  );
-
-  /* HESAP BUTONLARI */
-
-  $("#sidebarAuthBtn").addEventListener(
-    "click",
-    () => openAuth("register")
-  );
-
-  $("#accountAction").addEventListener(
-    "click",
-    () => {
-      if (state.user) {
-        logout();
-      } else {
-        openAuth("register");
-      }
+  $("#accountAction").addEventListener("click", () => {
+    if (state.user) {
+      logout();
+    } else {
+      openAuth("register");
     }
-  );
+  });
 
-  /* ARAMA */
+  // GİRİŞ / KAYIT SEKМELERİ
+  $$(".auth-tab").forEach(button => {
+    button.addEventListener("click", () => {
+      setAuthMode(button.dataset.authMode);
+    });
+  });
 
-  $("#searchInput").addEventListener(
-    "input",
-    event => {
-      state.query = event.target.value.trim();
-      render();
-    }
-  );
-
-  /* SIRALAMA */
-
-  $("#sortBtn").addEventListener("click", () => {
-    state.newestFirst = !state.newestFirst;
-
-    $("#sortBtn").innerHTML = `
-      <span class="sort-icon">↕</span>
-      ${state.newestFirst ? "Son eklenen" : "İlk eklenen"}
-      <span class="chevron">⌄</span>
-    `;
-
+  // ARAMA
+  $("#searchInput").addEventListener("input", event => {
+    state.query = event.target.value.trim();
     render();
   });
 
-  /* TÜM SAYFA TIKLAMALARI */
+  // SIRALAMA
+  $("#sortBtn").addEventListener("click", () => {
+    state.newestFirst = !state.newestFirst;
+    render();
+  });
 
-  document.addEventListener("click", event => {
-    const close = event.target.closest("[data-close]");
-
-    if (close) {
-      closeDialog(close.dataset.close);
-      return;
-    }
-
-    const filter = event.target.closest("[data-filter]");
-
-    if (filter) {
-      state.filter = filter.dataset.filter;
+  // FİLTRELER
+  $$("[data-filter]").forEach(button => {
+    button.addEventListener("click", () => {
+      state.filter = button.dataset.filter;
       render();
-      return;
-    }
+    });
+  });
 
-    const mode = event.target.closest("[data-mode]");
-
-    if (mode) {
-      setAddMode(mode.dataset.mode);
-      return;
-    }
-
-    const type = event.target.closest("[data-kind]");
-
-    if (type) {
-      setSelectedKind(type.dataset.kind);
-      return;
-    }
-
-    const authMode = event.target.closest("[data-auth-mode]");
-
-    if (authMode) {
-      setAuthMode(authMode.dataset.authMode);
-      return;
-    }
-
+  // DİĞER İŞLEMLER
+  document.addEventListener("click", event => {
     const action = event.target.closest("[data-action]");
-
     if (!action) return;
 
     if (action.dataset.action === "details") {
@@ -1951,17 +1910,11 @@ function bindEvents() {
     }
 
     if (action.dataset.action === "add-season") {
-      openChildDialog(
-        action.dataset.parent,
-        "season"
-      );
+      openChildDialog(action.dataset.parent, "season");
     }
 
     if (action.dataset.action === "add-episode") {
-      openChildDialog(
-        action.dataset.parent,
-        "episode"
-      );
+      openChildDialog(action.dataset.parent, "episode");
     }
 
     if (action.dataset.action === "delete-item") {
@@ -1973,21 +1926,48 @@ function bindEvents() {
     }
   });
 
-  /* DURUM DEĞİŞİKLİĞİ */
-
+  // İZLEME DURUMU
   document.addEventListener("change", event => {
     const select = event.target.closest(
       'select[data-action="status"]'
     );
 
     if (select) {
-      updateStatus(
-        select.dataset.id,
-        select.value,
-        select
-      );
+      updateStatus(select.dataset.id, select.value, select);
     }
   });
+
+  // KART KLAVYE DESTEĞİ
+  document.addEventListener("keydown", event => {
+    if (
+      (event.ctrlKey || event.metaKey) &&
+      event.key.toLowerCase() === "k"
+    ) {
+      event.preventDefault();
+      $("#searchInput").focus();
+    }
+
+    if (
+      event.key === "Enter" &&
+      event.target.matches('.card-poster[role="button"]')
+    ) {
+      openDetails(event.target.dataset.id);
+    }
+  });
+
+  // PENCERE DIŞINA DOKUNUNCA KAPAT
+  dialogs.forEach(id => {
+    const dialog = document.getElementById(id);
+
+    if (!dialog) return;
+
+    dialog.addEventListener("click", event => {
+      if (event.target === dialog) {
+        dialog.close();
+      }
+    });
+  });
+}
 
   /* KLAVYE KISAYOLLARI */
 
